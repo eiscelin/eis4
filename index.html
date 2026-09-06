@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Savings Pro — Save Your Budget More</title>
+  <meta name="description" content="Savings Pro — a simple savings wallet loaded by the admin. Track your balance and request withdrawals to GCash." />
+  <style>
+    :root{
+      --navy:#061225;
+      --navy2:#0b1b35;
+      --blue:#0879ff;
+      --blue2:#00a8ff;
+      --gold:#f5bd45;
+      --gold2:#ffd978;
+      --white:#fff;
+      --muted:#9fb0c8;
+      --line:rgba(255,255,255,.10);
+      --card:rgba(255,255,255,.055);
+      --shadow:0 25px 70px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--white);
+      background:
+        radial-gradient(circle at 80% 12%,rgba(0,145,255,.18),transparent 30%),
+        radial-gradient(circle at 15% 35%,rgba(245,189,69,.08),transparent 28%),
+        linear-gradient(180deg,#061225 0%,#07172d 55%,#04101f 100%);
+      min-height:100vh;
+    }
+    a{text-decoration:none;color:inherit}
+    button{font:inherit}
+    .container{width:min(1160px,calc(100% - 40px));margin:auto}
+    nav{
+      position:sticky;top:0;z-index:20;
+      background:rgba(6,18,37,.78);
+      backdrop-filter:blur(18px);
+      border-bottom:1px solid var(--line);
+    }
+    .nav-inner{height:76px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.2px}
+    .brand img{width:46px;height:46px;object-fit:contain}
+    .brand span{font-size:19px}
+    .nav-links{display:flex;align-items:center;gap:12px}
+    .nav-links a{padding:10px 15px;border-radius:10px;color:#d9e5f5;font-size:14px;font-weight:650}
+    .nav-links a:hover{background:rgba(255,255,255,.06)}
+    .btn{
+      border:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;
+      gap:9px;border-radius:12px;padding:13px 20px;font-weight:800;transition:.2s ease;
+    }
+    .btn:hover{transform:translateY(-2px)}
+    .btn-primary{
+      color:#071426;
+      background:linear-gradient(135deg,var(--gold2),var(--gold));
+      box-shadow:0 12px 30px rgba(245,189,69,.20);
+    }
+    .btn-secondary{color:#fff;background:rgba(255,255,255,.06);border:1px solid var(--line)}
+    .hero{padding:78px 0 72px;position:relative;overflow:hidden}
+    .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:55px}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;
+      color:var(--gold2);font-weight:850;font-size:12px;letter-spacing:2px;text-transform:uppercase;
+      margin-bottom:18px;
+    }
+    .eyebrow:before{content:"";width:30px;height:2px;background:var(--gold)}
+    h1{font-size:clamp(42px,6vw,72px);line-height:.98;margin:0 0 24px;letter-spacing:-2.5px}
+    h1 span{
+      background:linear-gradient(90deg,#fff 10%,#8fd0ff 75%);
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+    }
+    .lead{color:#b9c9dc;font-size:18px;line-height:1.75;max-width:650px;margin:0 0 30px}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:12px}
+    .logo-stage{display:grid;place-items:center;position:relative;min-height:430px}
+    .logo-stage:before{
+      content:"";position:absolute;width:360px;height:360px;border-radius:50%;
+      background:radial-gradient(circle,rgba(0,132,255,.26),transparent 66%);
+      filter:blur(10px);
+    }
+    .logo-stage img{position:relative;width:min(410px,85%);filter:drop-shadow(0 28px 35px rgba(0,0,0,.48));animation:float 5s ease-in-out infinite}
+    @keyframes float{50%{transform:translateY(-10px) rotate(.5deg)}}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:35px}
+    .stat{
+      padding:20px 16px;border:1px solid var(--line);background:var(--card);border-radius:16px;
+      text-align:center;box-shadow:0 12px 35px rgba(0,0,0,.10)
+    }
+    .stat strong{display:block;font-size:24px;margin-bottom:5px}
+    .stat span{font-size:12px;color:var(--muted)}
+    section{padding:90px 0}
+    .section-head{text-align:center;max-width:720px;margin:0 auto 48px}
+    .section-head h2{font-size:clamp(30px,4vw,44px);margin:0 0 12px;letter-spacing:-1px}
+    .section-head p{color:var(--muted);line-height:1.7;margin:0}
+    .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .step,.feature{
+      border:1px solid var(--line);background:linear-gradient(145deg,rgba(255,255,255,.065),rgba(255,255,255,.025));
+      border-radius:22px;padding:30px;box-shadow:var(--shadow)
+    }
+    .step-num{
+      width:46px;height:46px;border-radius:14px;display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--blue),#0752c8);font-weight:900;margin-bottom:22px;
+    }
+    .step h3,.feature h3{margin:0 0 10px;font-size:20px}
+    .step p,.feature p{margin:0;color:var(--muted);line-height:1.7;font-size:14px}
+    .features{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    .icon{
+      width:48px;height:48px;border-radius:14px;display:grid;place-items:center;
+      background:rgba(0,132,255,.14);color:#72c3ff;font-size:22px;margin-bottom:18px;
+    }
+    .cta{
+      margin:30px auto 90px;padding:60px 30px;text-align:center;border-radius:28px;
+      border:1px solid rgba(245,189,69,.25);
+      background:
+        radial-gradient(circle at 50% 0%,rgba(245,189,69,.13),transparent 45%),
+        linear-gradient(135deg,rgba(0,122,255,.14),rgba(255,255,255,.035));
+    }
+    .cta h2{font-size:clamp(30px,4vw,44px);margin:0 0 12px}
+    .cta p{color:var(--muted);margin:0 auto 25px;max-width:620px;line-height:1.7}
+    footer{border-top:1px solid var(--line);padding:28px 0;color:#71849e;font-size:13px;text-align:center}
+    .modal{
+      position:fixed;inset:0;z-index:50;display:none;place-items:center;
+      background:rgba(0,0,0,.70);backdrop-filter:blur(8px);padding:20px
+    }
+    .modal.open{display:grid}
+    .modal-box{
+      width:min(430px,100%);border:1px solid var(--line);border-radius:22px;padding:30px;
+      background:#091a31;box-shadow:0 30px 90px rgba(0,0,0,.55);position:relative
+    }
+    .close{position:absolute;right:14px;top:12px;border:0;background:none;color:#9eb0c8;font-size:28px;cursor:pointer}
+    .modal h2{margin:0 0 7px}.modal p{color:var(--muted);font-size:14px;margin:0 0 24px}
+    label{display:block;color:#cbd8e8;font-size:13px;font-weight:700;margin:14px 0 7px}
+    input{
+      width:100%;padding:13px 14px;border-radius:10px;border:1px solid #263a55;background:#061225;color:#fff;outline:none
+    }
+    input:focus{border-color:#188dff;box-shadow:0 0 0 3px rgba(24,141,255,.12)}
+    .modal .btn{width:100%;margin-top:20px}
+    .notice{display:none;margin-top:14px;padding:10px 12px;border-radius:10px;background:rgba(0,168,255,.10);color:#9ed8ff;font-size:13px}
+    @media(max-width:900px){
+      .hero-grid{grid-template-columns:1fr;text-align:center}.lead{margin-left:auto;margin-right:auto}
+      .hero-actions{justify-content:center}.logo-stage{min-height:330px}
+      .stats{grid-template-columns:repeat(2,1fr)}
+      .features{grid-template-columns:repeat(2,1fr)}
+    }
+    @media(max-width:650px){
+      .container{width:min(100% - 28px,1160px)}
+      .nav-inner{height:68px}.nav-links a:not(.login-link){display:none}
+      .brand span{font-size:16px}.brand img{width:40px;height:40px}
+      .hero{padding-top:55px}.logo-stage img{width:280px}
+      .stats,.steps,.features{grid-template-columns:1fr}
+      section{padding:65px 0}
+      .step,.feature{padding:24px}
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="container nav-inner">
+      <a class="brand" href="#top">
+        <img src="https://media.base44.com/images/public/6a60265126ce76965dce5ea0/2798d58a3_A8.png" alt="Savings Pro logo">
+        <span>Savings Pro</span>
+      </a>
+      <div class="nav-links">
+        <a href="#" class="login-link" onclick="openModal('login');return false;">Log In</a>
+        <a href="#" class="btn btn-primary" onclick="openModal('signup');return false;">Sign Up</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">Save Your Budget More</div>
+          <h1>Save Smart with <span>Savings Pro</span></h1>
+          <p class="lead">A simple savings wallet loaded by the admin. Track your balance, request withdrawals to GCash, and watch your savings grow — no codes, no levels, just savings.</p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" onclick="openModal('signup')">Get Started Free →</button>
+            <button class="btn btn-secondary" onclick="openModal('login')">Log In to My Wallet</button>
+          </div>
+        </div>
+        <div class="logo-stage">
+          <img src="https://media.base44.com/images/public/6a60265126ce76965dce5ea0/2798d58a3_A8.png" alt="Savings Pro">
+        </div>
+      </div>
+
+      <div class="container stats">
+        <div class="stat"><strong>1,200+</strong><span>Active Members</span></div>
+        <div class="stat"><strong>₱5M+</strong><span>Total Saved</span></div>
+        <div class="stat"><strong>₱300</strong><span>Min Withdrawal</span></div>
+        <div class="stat"><strong>GCash</strong><span>Payout Method</span></div>
+      </div>
+    </section>
+
+    <section id="how">
+      <div class="container">
+        <div class="section-head">
+          <h2>How Savings Pro Works</h2>
+          <p>Three simple steps to start saving.</p>
+        </div>
+        <div class="steps">
+          <article class="step"><div class="step-num">1</div><h3>Create Your Account</h3><p>Sign up and complete your profile with your GCash details.</p></article>
+          <article class="step"><div class="step-num">2</div><h3>Admin Loads Your Wallet</h3><p>The admin funds your savings wallet. Your balance updates instantly.</p></article>
+          <article class="step"><div class="step-num">3</div><h3>Withdraw Anytime</h3><p>Request a withdrawal and receive it straight to your GCash account.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <h2>Why Choose Savings Pro?</h2>
+          <p>Everything you need to manage your savings in one place.</p>
+        </div>
+        <div class="features">
+          <article class="feature"><div class="icon">₱</div><h3>Your Savings Wallet</h3><p>Track your savings balance in one simple wallet. Every load from the admin shows up instantly.</p></article>
+          <article class="feature"><div class="icon">＋</div><h3>Admin-Loaded Savings</h3><p>Your wallet is funded by the admin — no codes, no levels, just straightforward savings.</p></article>
+          <article class="feature"><div class="icon">↗</div><h3>GCash Withdrawals</h3><p>Request a withdrawal anytime and receive it straight to your GCash account.</p></article>
+          <article class="feature"><div class="icon">✓</div><h3>Secure &amp; Simple</h3><p>A clean, secure wallet experience focused only on your savings and withdrawals.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <div class="container cta">
+      <h2>Ready to Start Saving?</h2>
+      <p>Join hundreds of members already growing their savings with Savings Pro.</p>
+      <button class="btn btn-primary" onclick="openModal('signup')">Create Free Account →</button>
+    </div>
+  </main>
+
+  <footer>© 2026 Savings Pro. All rights reserved.</footer>
+
+  <div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
+    <div class="modal-box">
+      <button class="close" onclick="closeModal()" aria-label="Close">×</button>
+      <div id="loginForm">
+        <h2>Member Login</h2>
+        <p>Log in to access your Savings Pro wallet.</p>
+        <form onsubmit="demoSubmit(event,'login')">
+          <label>Email</label><input type="email" required placeholder="you@example.com">
+          <label>Password</label><input type="password" required placeholder="••••••••">
+          <button class="btn btn-primary" type="submit">Log In</button>
+        </form>
+        <div class="notice" id="loginNotice">Demo form only — connect this form to your real authentication backend.</div>
+      </div>
+      <div id="signupForm" style="display:none">
+        <h2>Create Account</h2>
+        <p>Start your Savings Pro wallet.</p>
+        <form onsubmit="demoSubmit(event,'signup')">
+          <label>Full Name</label><input required placeholder="Your name">
+          <label>Email</label><input type="email" required placeholder="you@example.com">
+          <label>Password</label><input type="password" minlength="8" required placeholder="At least 8 characters">
+          <label>GCash Number</label><input inputmode="numeric" pattern="09[0-9]{9}" required placeholder="09XXXXXXXXX">
+          <button class="btn btn-primary" type="submit">Create Account</button>
+        </form>
+        <div class="notice" id="signupNotice">Demo form only — connect this form to your real registration, email OTP, and database backend.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openModal(type){
+      document.getElementById('modal').classList.add('open');
+      document.getElementById('loginForm').style.display = type === 'login' ? 'block' : 'none';
+      document.getElementById('signupForm').style.display = type === 'signup' ? 'block' : 'none';
+    }
+    function closeModal(){document.getElementById('modal').classList.remove('open')}
+    function demoSubmit(e,type){
+      e.preventDefault();
+      document.getElementById(type+'Notice').style.display='block';
+    }
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+  </script>
+</body>
+</html>
